@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.gukguk.habittracker.view.LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/actionHabitListFragment"
+            app:destination="@id/habitListFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitListFragment"
+        android:name="com.gukguk.habittracker.view.HabitListFragment"
+        android:label="Dashboard Habit Tracker"
+        tools:layout="@layout/fragment_habit_list">
+        <action
+            android:id="@+id/actionCreateHabitFragment"
+            app:destination="@id/createHabitFragment"
+            app:popUpTo="@id/createHabitFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/createHabitFragment"
+        android:name="com.gukguk.habittracker.view.CreateHabitFragment"
+        android:label="Create New Habit"
+        tools:layout="@layout/fragment_create_habit">
+        <action
+            android:id="@+id/actionReturnToHabitList"
+            app:destination="@id/habitListFragment"
+            app:popUpTo="@id/habitListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
