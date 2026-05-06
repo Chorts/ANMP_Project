@@ -10,7 +10,7 @@ import com.gukguk.habittracker.databinding.FragmentLoginBinding
 import androidx.navigation.Navigation
 import com.gukguk.habittracker.databinding.ActivityMainBinding
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

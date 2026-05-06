@@ -14,7 +14,7 @@ import com.gukguk.habittracker.databinding.FragmentHabitListBinding
 import com.gukguk.habittracker.viewmodel.HabitListViewModel
 import kotlin.jvm.java
 
-class HabitListFragment : Fragment() {
+class HabitListFragment : Fragment(R.layout.fragment_habit_list) {
     private lateinit var viewModel: HabitListViewModel
     private lateinit var habitListAdapter: HabitListAdapter
     private lateinit var binding: FragmentHabitListBinding
@@ -30,13 +30,12 @@ class HabitListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(HabitListViewModel::class.java)
-        habitListAdapter = HabitListAdapter(arrayListOf(), viewModel)
-        binding.recViewHabit.adapter = habitListAdapter
-        viewModel.loadHabit()
+        habitListAdapter = HabitListAdapter(arrayListOf(),requireContext())
 
+        binding.recViewHabit.adapter = habitListAdapter
         binding.recViewHabit.layoutManager = LinearLayoutManager(context)
-        binding.recViewHabit.adapter = habitListAdapter
 
+        viewModel.loadHabit()
         observeViewModel()
 
         binding.refreshLayout.setOnRefreshListener {
