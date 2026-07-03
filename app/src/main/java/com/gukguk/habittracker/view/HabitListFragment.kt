@@ -11,10 +11,11 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gukguk.habittracker.R
 import com.gukguk.habittracker.databinding.FragmentHabitListBinding
+import com.gukguk.habittracker.model.Habit
 import com.gukguk.habittracker.viewmodel.HabitListViewModel
 import kotlin.jvm.java
 
-class HabitListFragment : Fragment(R.layout.fragment_habit_list) {
+class HabitListFragment : Fragment(R.layout.fragment_habit_list), HabitCardListener {
     private lateinit var viewModel: HabitListViewModel
     private lateinit var habitListAdapter: HabitListAdapter
     private lateinit var binding: FragmentHabitListBinding
@@ -30,7 +31,11 @@ class HabitListFragment : Fragment(R.layout.fragment_habit_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(HabitListViewModel::class.java)
-        habitListAdapter = HabitListAdapter(arrayListOf(),requireContext())
+        habitListAdapter = HabitListAdapter(
+            arrayListOf(),
+            requireContext(),
+            this
+        )
 
         binding.recViewHabit.adapter = habitListAdapter
         binding.recViewHabit.layoutManager = LinearLayoutManager(context)
@@ -50,6 +55,14 @@ class HabitListFragment : Fragment(R.layout.fragment_habit_list) {
             val action = HabitListFragmentDirections.actionCreateHabitFragment()
             Navigation.findNavController(it).navigate(action)
         }
+    }
+
+    override fun onAdd(habit: Habit) = viewModel.onAdd(habit)
+    override fun onSub(habit: Habit) = viewModel.onSub(habit)
+
+    override fun onTitleClick(habit: Habit) {
+        val action = HabitListFragmentDirections.actionEditHabitFragment(habit.id)
+        Navigation.findNavController(requireView()).navigate(action)
     }
 
     fun observeViewModel() {

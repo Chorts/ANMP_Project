@@ -4,12 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.gukguk.habittracker.databinding.CardHabitBinding
 import com.gukguk.habittracker.model.Habit
-import com.gukguk.habittracker.util.FileHelper
 
-class HabitListAdapter (val habitList:ArrayList<Habit>, val context: Context)
+interface HabitCardListener {
+    fun onAdd(habit: Habit)
+    fun onSub(habit: Habit)
+    fun onTitleClick(habit: Habit)
+}
+
+class HabitListAdapter (val habitList:ArrayList<Habit>, val context: Context, val listener: HabitCardListener)
     : RecyclerView.Adapter<HabitListAdapter.HabitViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,30 +35,15 @@ class HabitListAdapter (val habitList:ArrayList<Habit>, val context: Context)
             holder.binding.btnAdd.isEnabled = true
         }
 
-        holder.binding.txtName.text = habitList[position].name
-        holder.binding.txtDescription.text = habitList[position].description
-        holder.binding.txtProgress.text = "${habitList[position].progress} / ${habitList[position].goal} ${habitList[position].unit}"
         holder.binding.imgHabit.setImageResource(habitList[position].imageID)
         holder.binding.progressBar.max = habitList[position].goal
         holder.binding.progressBar.progress = habitList[position].progress
 
         val habit = habitList[position]
 
-        holder.binding.btnAdd.setOnClickListener {
-            if (habit.progress < habit.goal) {
-                habit.progress++
-                notifyItemChanged(position)
-                saveToFile()
-            }
-        }
-
-        holder.binding.btnSub.setOnClickListener {
-            if (habit.progress > 0) {
-                habit.progress--
-                notifyItemChanged(position)
-                saveToFile()
-            }
-        }
+        holder.binding.habit = habit
+        holder.binding.listener = listener
+        holder.binding.executePendingBindings()
     }
 
     override fun getItemCount(): Int {
@@ -68,11 +57,5 @@ class HabitListAdapter (val habitList:ArrayList<Habit>, val context: Context)
         habitList.clear()
         habitList.addAll(newHabitList)
         notifyDataSetChanged()
-    }
-
-    fun saveToFile() {
-        val fileHelper = FileHelper(context)
-        val json = Gson().toJson(habitList)
-        fileHelper.writeToFile(json)
     }
 }

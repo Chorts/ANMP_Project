@@ -12,6 +12,7 @@ material = "1.13.0"
 activity = "1.12.4"
 constraintlayout = "2.2.1"
 coroutines = "1.5.0"
+roomRuntime = "2.7.1"
 swiperefreshlayout = "1.1.0"
 recyclerview = "1.4.0"
 cardview = "1.0.0"
@@ -21,9 +22,15 @@ fragment = "1.8.9"
 volley = "1.2.1"
 gson = "2.13.2"
 firebaseCrashlyticsBuildtools = "3.0.7"
+navigationFragmentKtxVersion = "2.9.8"
+navigationUiKtxVersion = "2.9.8"
+playServicesCastFramework = "22.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 gson-v2101 = { module = "com.google.code.gson:gson", version.ref = "googleGson" }
 gson-v2132 = { module = "com.google.code.gson:gson", version.ref = "gsonVersion" }
@@ -45,8 +52,11 @@ androidx-fragment = { group = "androidx.fragment", name = "fragment", version.re
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtxVersion" }
+play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

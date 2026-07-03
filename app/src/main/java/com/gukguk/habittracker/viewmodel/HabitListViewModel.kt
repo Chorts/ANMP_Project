@@ -1,13 +1,11 @@
 package com.gukguk.habittracker.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.gukguk.habittracker.model.AppDatabase
 import com.gukguk.habittracker.model.Habit
-import com.gukguk.habittracker.util.FileHelper
+
 
 class HabitListViewModel(application: Application): AndroidViewModel(application)  {
     val habitLD = MutableLiveData<ArrayList<Habit>>()
@@ -16,27 +14,31 @@ class HabitListViewModel(application: Application): AndroidViewModel(application
 
     val loadingLD = MutableLiveData<Boolean>()
 
+    private val habitDao = AppDatabase.getDatabase(application).habitDao()
+
     fun loadHabit() {
         loadingLD.value = true
         habitLoadErrorLD.value = false
 
-        val fileHelper = FileHelper(getApplication())
-        val json = fileHelper.readFromFile()
-
-        if (json.isNotEmpty()) {
-            val sType = object : TypeToken<List<Habit>>() {}.type
-            val result = Gson().fromJson<List<Habit>>(json, sType)
-            habitLD.value = result as ArrayList<Habit>
-        } else {
-            habitLD.value = arrayListOf()
+        habitDao.getAll().observeForever {
+            habitLD.value = ArrayList(it)
+            loadingLD.value = false
         }
-
-        loadingLD.value = false
     }
 
-    fun saveFile(habitList: ArrayList<Habit>) {
-        val fileHelper = FileHelper(getApplication())
-        val json = Gson().toJson(habitList)
-        fileHelper.writeToFile(json)
+    fun onAdd(habit: Habit) {
+        if (habit.progress < habit.goal) {
+            habit.progress++
+            Thread { habitDao.update(habit) }.start()
+        }
+    }
+
+    fun onSub(habit: Habit) {
+        if (habit.progress > 0) {
+            habit.progress--
+            Thread {
+                habitDao.update(habit)
+            }.start()
+        }
     }
 }
