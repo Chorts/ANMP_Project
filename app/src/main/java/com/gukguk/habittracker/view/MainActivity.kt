@@ -2,12 +2,15 @@ package com.gukguk.habittracker.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.gukguk.habittracker.R
 import com.gukguk.habittracker.databinding.ActivityMainBinding
+import com.gukguk.habittracker.model.User
 import com.gukguk.habittracker.util.SessionManager
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

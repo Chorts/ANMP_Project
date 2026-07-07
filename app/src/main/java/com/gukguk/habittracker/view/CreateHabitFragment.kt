@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -13,10 +15,12 @@ import com.gukguk.habittracker.R
 import com.gukguk.habittracker.databinding.FragmentCreateHabitBinding
 import com.gukguk.habittracker.model.Habit
 import com.gukguk.habittracker.util.FileHelper
+import com.gukguk.habittracker.viewmodel.CreateHabitViewModel
 
 
 class CreateHabitFragment : Fragment(R.layout.fragment_create_habit) {
     private lateinit var binding: FragmentCreateHabitBinding
+    private lateinit var viewModel: CreateHabitViewModel
     private val ICONS = arrayOf("Fitness", "Water", "Read", "Meditation")
 
     override fun onCreateView(
@@ -29,6 +33,7 @@ class CreateHabitFragment : Fragment(R.layout.fragment_create_habit) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(CreateHabitViewModel::class.java)
 
         val adapter:ArrayAdapter<String> =
             ArrayAdapter<String>(requireContext(),
@@ -53,6 +58,7 @@ class CreateHabitFragment : Fragment(R.layout.fragment_create_habit) {
             }
 
             val newHabit = Habit(
+                0,
                 name,
                 desc,
                 unit,
@@ -62,13 +68,22 @@ class CreateHabitFragment : Fragment(R.layout.fragment_create_habit) {
             )
 
             habitList.add(newHabit)
-
-            val newJson = Gson().toJson(habitList)
-            fileHelper.writeToFile(newJson)
+            viewModel.createHabit(newHabit)
 
             val action = CreateHabitFragmentDirections.actionReturnToHabitList()
             Navigation.findNavController(it).navigate(action)
         }
+
+        observeViewModel(view)
+    }
+
+    fun observeViewModel(view: View) {
+        viewModel.habitCreatedLD.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                val action = CreateHabitFragmentDirections.actionReturnToHabitList()
+                Navigation.findNavController(view).navigate(action)
+            }
+        })
     }
 
     fun getImage(icon: String): Int {

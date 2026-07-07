@@ -4,14 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.gukguk.habittracker.util.DB_NAME
 
-@Database(
-    entities = [Habit::class, User::class],
-    version = 2,
-    exportSchema = false
-)
+@Database(entities = [Habit::class, User::class], version = 2,)
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun userDao(): UserDao
     abstract fun habitDao(): HabitDao
 
@@ -32,5 +28,12 @@ abstract class AppDatabase : RoomDatabase() {
                 instance
             }
         }
+
+        fun buildDatabase(context: Context) =
+            Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
+                DB_NAME)
+                .build()
     }
 }

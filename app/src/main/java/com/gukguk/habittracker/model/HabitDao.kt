@@ -11,7 +11,7 @@ import androidx.room.Query
 interface HabitDao {
 
     @Query("SELECT * FROM habit")
-    fun getAll(): LiveData<List<Habit>>
+    fun getAll(): List<Habit>
 
     @Update
     fun update(habit: Habit)
