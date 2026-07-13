@@ -90,7 +90,8 @@
                     android:id="@+id/txtGoal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:text="@{String.valueOf(habit.goal)}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -149,4 +150,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
-</layout>
+</layout>

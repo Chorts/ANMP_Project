@@ -5,37 +5,59 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.gukguk.habittracker.R
+import com.gukguk.habittracker.databinding.FragmentEditHabitBinding
+import com.gukguk.habittracker.model.Habit
+import com.gukguk.habittracker.viewmodel.EditHabitViewModel
 
 class EditHabitFragment : Fragment(R.layout.fragment_edit_habit) {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var binding: FragmentEditHabitBinding
+    private lateinit var viewModel: EditHabitViewModel
+    private var habitId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_edit_habit, container, false)
+        binding = FragmentEditHabitBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment editHabitFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditHabitFragment().apply {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(EditHabitViewModel::class.java)
+
+        habitId = EditHabitFragmentArgs.fromBundle(requireArguments()).habitId
+        viewModel.loadHabit(habitId)
+
+        binding.btnUpdate.setOnClickListener {
+            val habit = binding.habit
+            if (habit != null) {
+                habit.name = binding.txtName.text.toString()
+                habit.description = binding.txtDesc.text.toString()
+                habit.goal = binding.txtGoal.text.toString().toIntOrNull() ?: habit.goal
+                habit.unit = binding.txtUnit.text.toString()
+
+                viewModel.updateHabit(habit)
             }
+        }
+
+        observeViewModel(view)
+    }
+
+    fun observeViewModel(view: View) {
+        viewModel.habitLD.observe(viewLifecycleOwner, Observer {
+            binding.habit = it
+            binding.executePendingBindings()
+        })
+        viewModel.habitUpdatedLD.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                val action = EditHabitFragmentDirections.actionReturnToHabitList()
+                Navigation.findNavController(view).navigate(action)
+            }
+        })
     }
 }

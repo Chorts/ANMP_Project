@@ -13,6 +13,9 @@ interface HabitDao {
     @Query("SELECT * FROM habit")
     fun getAll(): List<Habit>
 
+    @Query("SELECT * FROM habit WHERE id = :id")
+    fun getById(id: Int): Habit
+
     @Update
     fun update(habit: Habit)
 

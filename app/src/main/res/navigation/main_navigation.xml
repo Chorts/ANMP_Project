@@ -50,6 +50,11 @@
         <argument
             android:name="habitId"
             app:argType="integer" />
+        <action
+            android:id="@+id/actionReturnToHabitList"
+            app:destination="@id/habitListFragment"
+            app:popUpTo="@id/habitListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
