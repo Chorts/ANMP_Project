@@ -60,7 +60,11 @@ class HabitListFragment : Fragment(R.layout.fragment_habit_list), HabitCardListe
     override fun onAdd(habit: Habit) = viewModel.onAdd(habit)
     override fun onSub(habit: Habit) = viewModel.onSub(habit)
 
-    override fun onTitleClick(habit: Habit) {
+    override fun onTitleClick(habit: Habit) = navigateToEditHabit(habit)
+
+    override fun onEditClick(habit: Habit) = navigateToEditHabit(habit)
+
+    private fun navigateToEditHabit(habit: Habit) {
         val action = HabitListFragmentDirections.actionEditHabitFragment(habit.id)
         Navigation.findNavController(requireView()).navigate(action)
     }

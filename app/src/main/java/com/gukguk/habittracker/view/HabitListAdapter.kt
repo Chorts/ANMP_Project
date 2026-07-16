@@ -11,6 +11,8 @@ interface HabitCardListener {
     fun onAdd(habit: Habit)
     fun onSub(habit: Habit)
     fun onTitleClick(habit: Habit)
+
+    fun onEditClick(habit: Habit)
 }
 
 class HabitListAdapter (val habitList:ArrayList<Habit>, val context: Context, val listener: HabitCardListener)
